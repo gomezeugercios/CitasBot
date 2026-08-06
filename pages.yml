@@ -1,0 +1,37 @@
+name: Deploy landing to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un despliegue a la vez; no cancela el que ya está en curso.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/configure-pages@v6.0.0
+
+      # El sitio es estático: se sube la raíz del repo tal cual.
+      - uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: .
+
+      - id: deployment
+        # Versión EXACTA a propósito: el tag móvil "v5" no existe en este
+        # repo de acciones y "@v5" falla con "unable to find version".
+        uses: actions/deploy-pages@v5.0.0
