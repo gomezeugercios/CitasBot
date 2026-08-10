@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Cambia esta URL por la de tu web cuando publiques
+Sitemap: https://TU-USUARIO.github.io/citas-landing/sitemap.xml
